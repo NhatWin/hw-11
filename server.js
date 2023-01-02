@@ -1,5 +1,5 @@
 const noteData = require("./db/db.json")
-
+const { v4: uuidv4 } = require('uuid');
 const express = require("express");
 const path = require("path");
 const { writeFile, writeFileSync } = require("fs");
@@ -15,10 +15,14 @@ app.use(express.json())
 app.get("/api/notes", (_,res) => res.json(noteData));
 
 app.post("/api/notes", (req, res) => {
-  noteData.push(req.body)
+  const newNote = req.body;
+  newNote.id = uuidv4();
+  noteData.push(newNote);
   writeFileSync("./db/db.json", JSON.stringify(noteData));
-  res.json(noteData)
+  res.json(noteData);
 })
+
+// Delete
 
 
 // Display
