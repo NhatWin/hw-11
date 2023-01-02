@@ -1,9 +1,10 @@
-const noteData = require("./db/db.json")
+let noteData = require("./db/db.json")
 const { v4: uuidv4 } = require('uuid');
 const express = require("express");
 const path = require("path");
 const { writeFile, writeFileSync } = require("fs");
 const { stringify } = require("querystring");
+const { DefaultDeserializer } = require("v8");
 
 const app = express();
 const PORT = 3001;
@@ -23,6 +24,11 @@ app.post("/api/notes", (req, res) => {
 })
 
 // Delete
+app.delete("/api/notes/:id", (req,res) => {
+  noteData = noteData.filter((note) => note.id !== req.params.id)
+  writeFileSync("./db/db.json", JSON.stringify(noteData));
+  res.json(noteData);
+})
 
 
 // Display
